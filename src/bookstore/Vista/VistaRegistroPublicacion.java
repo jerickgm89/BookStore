@@ -8,6 +8,7 @@ package bookstore.Vista;
 import bookstore.BaseDatos.Conexion;
 import bookstore.Controlador.RegistroControlador;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,13 +28,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         //campos deshabilitados Permanentemente
         txtPublicacion.setEditable(false);
         
-        //Campos deshabilitados Parcialmente
-        txtTitulo.setEditable(false);
-        txtAutor.setEditable(false);
-        txtEdicion.setEditable(false);
-        txtCantidad.setEditable(false);
-        txtPrecio.setEditable(false);
-        btnRegistrar.setEnabled(false);
+        desabilitarCampos();
         
         
         //Llenando datos a la lista despegable
@@ -79,7 +74,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("REGISTRO DE NUEVA PUBLICACION");
@@ -100,9 +95,27 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
 
         jLabel6.setText("Nº DE EDICION");
 
+        txtEdicion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdicionKeyTyped(evt);
+            }
+        });
+
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
+
         jLabel7.setText("CANTIDAD o STOCK");
 
         jLabel8.setText("PRECIO UNITARIO");
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnRegistrar.setText("REGISTRAR");
@@ -238,13 +251,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         // TODO add your handling code here:
         txtPublicacion.setText(null);
         
-        //Habilitados campos
-        txtTitulo.setEditable(true);
-        txtAutor.setEditable(true);
-        txtEdicion.setEditable(true);
-        txtCantidad.setEditable(true);
-        txtPrecio.setEditable(true);
-        btnRegistrar.setEnabled(true);
+        habilitarCampos();
         
         //Guardando los datos del Usuario
         datoSeleccion = (String)jComboPublic.getSelectedItem();
@@ -314,10 +321,52 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         
         c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
         c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
-        
+            
         c.desconexion();
+        
+        JOptionPane.showMessageDialog(null, "Registro realizado con exito");
+        
+        limpiarCampos();
+        desabilitarCampos();
+        
        
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void txtEdicionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdicionKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Ingresar solo Numeros");
+        }
+    }//GEN-LAST:event_txtEdicionKeyTyped
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Ingresar solo Numeros");
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Ingresar solo Numeros");
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
     
     public RegistroControlador recuperarDatosVista(){
         
@@ -377,6 +426,37 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         }
         return numero;
     }
+    
+    private void desabilitarCampos() {
+        //Campos deshabilitados Parcialmente
+        txtTitulo.setEditable(false);
+        txtAutor.setEditable(false);
+        txtEdicion.setEditable(false);
+        txtCantidad.setEditable(false);
+        txtPrecio.setEditable(false);
+        btnRegistrar.setEnabled(false);
+        
+    }
+    
+    private void habilitarCampos() {
+        //Habilitados campos
+        txtTitulo.setEditable(true);
+        txtAutor.setEditable(true);
+        txtEdicion.setEditable(true);
+        txtCantidad.setEditable(true);
+        txtPrecio.setEditable(true);
+        btnRegistrar.setEnabled(true);
+    }   
+    
+    private void limpiarCampos(){
+        txtPublicacion.setText(null);
+        txtTitulo.setText(null);
+        txtAutor.setText(null);
+        txtEdicion.setText(null);
+        txtCantidad.setText(null);
+        txtPrecio.setText(null);
+        btnRegistrar.setEnabled(false);
+    }
     /**
      * @param args the command line arguments
      */
@@ -433,4 +513,5 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
     private javax.swing.JTextField txtPublicacion;
     private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
+
 }
