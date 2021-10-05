@@ -5,18 +5,41 @@
  */
 package bookstore.Vista;
 
+import bookstore.BaseDatos.Conexion;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jeric
  */
 public class VistaConsulta extends javax.swing.JFrame {
-
+    DefaultTableModel modelo;
     /**
      * Creates new form VistaConsulta
      */
     public VistaConsulta() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        //Llenando datos a la lista despegable
+        Conexion c = new Conexion();
+        c.getConnection();
+        try {
+            ResultSet resultado = c.consultarRegistros("SELECT IDTIPO FROM PUBLICACION GROUP BY IDTIPO");
+            while(resultado.next()){
+                jComboConsulta.addItem(resultado.getString("IDTIPO"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        c.desconexion();
+        //Estableciendo el nombre de las columnas a la tabla
+        String[] titulos = {"ID VENTA", "FECHA", "ID PUBLIC", "CANTIDAD", "TOTAL"};
+        modelo = new DefaultTableModel(null, titulos);
+        jTableConsulta.setModel(modelo);
+        
+        
     }
 
     /**
@@ -30,10 +53,10 @@ public class VistaConsulta extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboConsulta = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableConsulta = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -43,7 +66,11 @@ public class VistaConsulta extends javax.swing.JFrame {
 
         jLabel2.setText("TIPO DE PUBLICACION");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboConsultaActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("BUSCAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -52,7 +79,7 @@ public class VistaConsulta extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableConsulta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -63,7 +90,7 @@ public class VistaConsulta extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableConsulta);
 
         jButton2.setText("SALIR");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -79,24 +106,23 @@ public class VistaConsulta extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(154, 154, 154)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(33, 33, 33)
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2)))
-                        .addGap(0, 214, Short.MAX_VALUE))
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboConsulta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(33, 33, 33)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(0, 282, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(185, 185, 185))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,7 +133,7 @@ public class VistaConsulta extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -120,6 +146,7 @@ public class VistaConsulta extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        mostrarDatos();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -129,6 +156,54 @@ public class VistaConsulta extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jComboConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboConsultaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboConsultaActionPerformed
+
+    public void mostrarDatos(){
+        //Limpiando la tabla de informacion
+        modelo.getDataVector().removeAllElements();
+        jTableConsulta.updateUI();
+        
+        //Guardando los datos del Usuario
+        String datoSeleccion = (String)jComboConsulta.getSelectedItem();
+        
+        //Condicional para ejecutar la sentencia
+        String sentenciaSQL = "";
+            switch(datoSeleccion){
+                case "LIB":
+                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'LIB%'";
+                    break;
+                case "REV":
+                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'REV%'";
+                    break;
+                case "SEP":
+                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'SEP%'";
+                    break;
+                default:
+                    System.out.println("Error");
+                    break;
+            }
+        
+        //Mostrando los datos en la tabla    
+        Conexion c = new Conexion();
+        c.getConnection();
+        try { 
+                
+            ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+            while(resultado.next()){
+                
+                Object[] oUsuario={resultado.getString("IDVENTA"), resultado.getString("FECHA"), resultado.getString("IDPUBLICACION"), resultado.getString("CANTIDAD"), resultado.getString("TOTAL")};
+                
+                modelo.addRow(oUsuario);
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        c.desconexion();
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -167,10 +242,10 @@ public class VistaConsulta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboConsulta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableConsulta;
     // End of variables declaration//GEN-END:variables
 }
