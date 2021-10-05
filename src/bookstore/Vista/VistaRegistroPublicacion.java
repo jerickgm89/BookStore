@@ -6,6 +6,7 @@
 package bookstore.Vista;
 
 import bookstore.BaseDatos.Conexion;
+import bookstore.Controlador.RegistroControlador;
 import java.sql.ResultSet;
 
 /**
@@ -99,7 +100,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
 
         jLabel6.setText("Nº DE EDICION");
 
-        jLabel7.setText("CANTIDAD");
+        jLabel7.setText("CANTIDAD o STOCK");
 
         jLabel8.setText("PRECIO UNITARIO");
 
@@ -295,11 +296,86 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+
+        
+        
+        String idPublicacion = txtPublicacion.getText();
+        String tipoPublicacion = (String)jComboPublic.getSelectedItem();
+        int numero = numeroContador();
+
+        RegistroControlador datosVista = recuperarDatosVista();
+        
+        Conexion c = new Conexion();
+        c.getConnection();
+        
+        String sentenciaInsertarSQL = String.format("INSERT INTO PUBLICACION VALUES ('%s','%s','%s','%s',%d,%d,%d)", idPublicacion, datosVista.getTitulo(), tipoPublicacion, datosVista.getAutor(), datosVista.getNumeroEdicion(), datosVista.getCantidadStock(), datosVista.getPrecio() );
+        
+        String sentenciaUpdateSQL = String.format("UPDATE TIPO SET CONTADOR = %d WHERE IDTIPO = '%s'", numero, tipoPublicacion);
+        
+        c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
+        c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
+        
+        c.desconexion();
+       
     }//GEN-LAST:event_btnRegistrarActionPerformed
+    
+    public RegistroControlador recuperarDatosVista(){
+        
+        RegistroControlador datos = new RegistroControlador();
+        
+        int numeroEdicion = Integer.parseInt(txtEdicion.getText());
+        int cantidadStock = Integer.parseInt(txtCantidad.getText());
+        int precio = Integer.parseInt(txtPrecio.getText());
+        
+        datos.setTitulo(txtTitulo.getText());
+        datos.setAutor(txtAutor.getText());
+        datos.setNumeroEdicion(numeroEdicion);
+        datos.setCantidadStock(cantidadStock);
+        datos.setPrecio(precio);
+        
+        return datos;        
+    }
     
     public void agregarIdPublicacion(String idPublicacion){ 
                             
         txtPublicacion.setText(idPublicacion);
+    }
+    
+    public int numeroContador(){
+        //Para saber el contador
+        datoSeleccion = (String)jComboPublic.getSelectedItem();
+        
+        String sentenciaSQL = "";
+            switch(datoSeleccion){
+                case "LIB":
+                    sentenciaSQL = "SELECT CONTADOR FROM TIPO WHERE IDTIPO LIKE 'LIB'";
+                    break;
+                case "REV":
+                    sentenciaSQL = "SELECT CONTADOR FROM TIPO WHERE IDTIPO LIKE 'REV'";
+                    break;
+                case "SEP":
+                    sentenciaSQL = "SELECT CONTADOR FROM TIPO WHERE IDTIPO LIKE 'SEP'";
+                    break;
+                default:
+                    System.out.println("Error");
+                    break;
+            }
+        
+        Conexion c = new Conexion();
+        c.getConnection();
+        
+        ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+        int numero = 0;
+        try {
+            while(resultado.next()){
+                 numero = Integer.parseInt(resultado.getString("CONTADOR"));
+                 numero += 1;
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return numero;
     }
     /**
      * @param args the command line arguments
