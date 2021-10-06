@@ -482,13 +482,12 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         
         Conexion c = new Conexion();
         c.getConnection();
-        try {
-            c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
-            c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        
+        
+        c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
+        c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
+        
+        c.desconexion();
         
         JOptionPane.showMessageDialog(null, "Venta Realizada con exito");
         
