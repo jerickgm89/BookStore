@@ -7,8 +7,8 @@ package bookstore.Vista;
 
 import bookstore.BaseDatos.Conexion;
 import java.sql.ResultSet;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -16,13 +16,13 @@ import java.util.GregorianCalendar;
  */
 public class VistaRegistroVenta extends javax.swing.JFrame {
 
-    Calendar fechaActual = new GregorianCalendar();
+   
     
     public VistaRegistroVenta() {
         initComponents();
         this.setLocationRelativeTo(null);
         
-        jFechaActual.setCalendar(fechaActual);
+        txtFechaActual.setText(fecha());
         
         //Llenando datos a la lista despegable
         Conexion c = new Conexion();
@@ -87,9 +87,9 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jComboVenta = new javax.swing.JComboBox<>();
-        jFechaActual = new com.toedter.calendar.JDateChooser();
         jComboEmpleado = new javax.swing.JComboBox<>();
         jButton4 = new javax.swing.JButton();
+        txtFechaActual = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -254,9 +254,11 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jComboEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jFechaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(96, 96, 96))
+                                    .addComponent(txtFechaActual))))
                         .addGap(20, 20, 20))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(110, 110, 110)
@@ -268,24 +270,17 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jBuscar)
-                                    .addComponent(jComboVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
-                                .addGap(9, 9, 9))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(jFechaActual, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                                .addGap(99, 99, 99)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBuscar)
+                            .addComponent(jComboVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addGap(9, 9, 9)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
@@ -323,7 +318,9 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addComponent(jLabel16))
                         .addGap(8, 8, 8)
-                        .addComponent(jComboEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFechaActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -370,6 +367,12 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtPrecioUnitario.setText(precioUnitario);
         txtStock.setText(stock);
     }
+    
+    public static String fecha(){
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+        return formatoFecha.format(fecha);
+    }
     /**
      * @param args the command line arguments
      */
@@ -412,7 +415,6 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboEmpleado;
     private javax.swing.JComboBox<String> jComboVenta;
-    private com.toedter.calendar.JDateChooser jFechaActual;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -437,6 +439,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JTextField txtAutorPublicacion;
+    private javax.swing.JTextField txtFechaActual;
     private javax.swing.JTextField txtNombrePublicacion;
     private javax.swing.JTextField txtPrecioUnitario;
     private javax.swing.JTextField txtStock;
