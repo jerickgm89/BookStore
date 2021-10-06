@@ -40,7 +40,7 @@ public class RegistroVentaControlador {
         
         int parcial = precio * cantidad;
         
-        subtotal = parcial * igv;
+        subtotal = parcial + (parcial * igv);
         
         return subtotal;       
         

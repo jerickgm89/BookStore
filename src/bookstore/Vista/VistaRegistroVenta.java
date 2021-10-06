@@ -6,6 +6,7 @@
 package bookstore.Vista;
 
 import bookstore.BaseDatos.Conexion;
+import bookstore.Controlador.RegistroVentaControlador;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +32,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtAutorPublicacion.setEditable(false);
         txtPrecioUnitario.setEditable(false);
         txtStock.setEditable(false);
+        btnRegistrar.setEnabled(false);
         
         //Deshabilitando campos cliente
         deshabilitarCamposCliente();
@@ -97,7 +99,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtTotal = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         txtIGV = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jComboVenta = new javax.swing.JComboBox<>();
@@ -212,8 +214,13 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("REGISTRAR VENTA");
+        btnRegistrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnRegistrar.setText("REGISTRAR VENTA");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton3.setText("CANCELAR");
@@ -247,7 +254,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtNombreCliente)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,7 +354,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(17, 17, 17))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -401,6 +408,31 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
 
     private void jCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCalcularActionPerformed
         // TODO add your handling code here:
+        RegistroVentaControlador calcular = new RegistroVentaControlador();
+        
+        int precioUnitario = Integer.parseInt(txtPrecioUnitario.getText());
+        int cantidad = Integer.parseInt(txtCantidad.getText());
+        double descuento = calcular.calculoDescuento(cantidad);
+        double igv = obtenerIGV();
+        double subtotal = calcular.subtotal(cantidad, precioUnitario, igv);
+        double totalPago = calcular.totalPago(subtotal, descuento);
+        
+        System.out.println(precioUnitario);
+        System.out.println(cantidad);
+        System.out.println(descuento);
+        System.out.println(igv);
+        System.out.println(subtotal);
+        System.out.println(totalPago);
+        
+        String descuentoFinal = String.valueOf(descuento * 100) + '%';
+        String igvFinal = String.valueOf(igv * 100) + '%';
+        
+        txtSubtotal.setText(String.valueOf(subtotal));
+        txtIGV.setText(String.valueOf(igvFinal));
+        txtDescuento.setText(String.valueOf(descuentoFinal));
+        txtTotal.setText(String.valueOf(totalPago));
+        
+        btnRegistrar.setEnabled(true);
     }//GEN-LAST:event_jCalcularActionPerformed
 
     private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
@@ -414,7 +446,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ingresar solo Numeros");
         }
     }//GEN-LAST:event_txtCantidadKeyTyped
-
+    
     private void txtSubtotalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSubtotalKeyTyped
         // TODO add your handling code here:
 
@@ -424,6 +456,43 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_txtIGVKeyTyped
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        int ventaContador = obtenerVenta();
+        ventaContador += 1;
+        
+        String ventaContadorS = String.valueOf(ventaContador);
+        
+        System.out.println(ventaContador);
+        
+        RegistroVentaControlador datos = recuperarDatosVenta();
+        String fecha = txtFechaActual.getText();
+        System.out.println(fecha);
+        int idEmpleado = Integer.parseInt((String)jComboEmpleado.getSelectedItem());
+        String numeroPublicacion = (String)jComboVenta.getSelectedItem();
+              
+        int descuento = (int)Math.round(datos.getDescuento());
+        int subtotal = (int)Math.round(datos.getSubtotal());
+        int igv = (int)Math.round(datos.getIgv());
+        int total = (int)Math.round(datos.getTotal());
+        
+        String sentenciaInsertarSQL = String.format("INSERT INTO VENTA VALUES (%d, '%s', '%s', %d, '%s', %d, %d, %d, %d, %d, %d)", ventaContador, datos.getNombreCliente(), fecha, idEmpleado, numeroPublicacion, datos.getCantidad(), datos.getPrecio(), descuento, subtotal, igv, total);
+        String sentenciaUpdateSQL = String.format("UPDATE CONTROL SET VALOR = '%s' WHERE PARAMETRO = 'VENTA'", ventaContadorS);
+        
+        Conexion c = new Conexion();
+        c.getConnection();
+        try {
+            c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
+            c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        JOptionPane.showMessageDialog(null, "Venta Realizada con exito");
+        
+    }//GEN-LAST:event_btnRegistrarActionPerformed
     
     public void agregarDatosCampos(String titulo, String autor, String precioUnitario, String stock){
         txtNombrePublicacion.setText(titulo);
@@ -432,10 +501,66 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtStock.setText(stock);
     }
     
+    public RegistroVentaControlador recuperarDatosVenta(){
+        RegistroVentaControlador datos = new RegistroVentaControlador();
+        
+        int cantidad = Integer.parseInt(txtCantidad.getText());
+        int precio = Integer.parseInt(txtPrecioUnitario.getText());
+        double descuento = datos.calculoDescuento(cantidad);
+        double igv = obtenerIGV();
+        double subtotal = datos.subtotal(cantidad, precio, igv);
+        double totalPago = datos.totalPago(subtotal, descuento);
+        
+        datos.setNombreCliente(txtNombreCliente.getText());
+        datos.setCantidad(cantidad);
+        datos.setPrecio(precio);
+        datos.setDescuento(descuento);
+        datos.setIgv(igv);
+        datos.setSubtotal(subtotal);
+        datos.setTotal(totalPago);
+        
+        return datos;        
+    }
+    
     public static String fecha(){
         Date fecha = new Date();
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
         return formatoFecha.format(fecha);
+    }
+    
+        
+    public double obtenerIGV(){
+        Conexion c = new Conexion();
+        c.getConnection();
+        String sentenciaSQL = "SELECT VALOR FROM CONTROL WHERE PARAMETRO = 'IGV'";
+        ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+        double igv = 0;
+        try {
+            while(resultado.next()){
+                 igv = Double.parseDouble(resultado.getString("VALOR"));
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return igv;
+    }
+    
+    public int obtenerVenta(){
+        Conexion c = new Conexion();
+        c.getConnection();
+        String sentenciaSQL = "SELECT VALOR FROM CONTROL WHERE PARAMETRO = 'VENTA'";
+        ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+        int ventaContador = 0;
+        try {
+            while(resultado.next()){
+                 ventaContador = Integer.parseInt(resultado.getString("VALOR"));
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return ventaContador;
     }
     
     public void deshabilitarCamposCliente(){
@@ -491,8 +616,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton jBuscar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jCalcular;
     private javax.swing.JComboBox<String> jComboEmpleado;
