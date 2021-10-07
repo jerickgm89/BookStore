@@ -269,21 +269,15 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         c.getConnection();
         try {
             ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+            RegistroControlador contador = new RegistroControlador();
+            
             while(resultado.next()){
                 System.out.println(resultado.getString("CONTADOR"));
                 int numero = Integer.parseInt(resultado.getString("CONTADOR"));
-                numero += 1;
                 
-                String idPublicidad = "";
-                if (numero >= 10) {
-                    idPublicidad = datoSeleccion + "000" + numero;                    
-                }else if (numero >= 100){
-                    idPublicidad = datoSeleccion + "00" + numero;  
-                }else {
-                    idPublicidad = datoSeleccion + "0000" + numero;
-                }
+                String idPublicacion = contador.generadorCodigo(numero, datoSeleccion);
                 
-                agregarIdPublicacion(idPublicidad);
+                agregarIdPublicacion(idPublicacion);
             }
             
         } catch (Exception e) {
@@ -295,9 +289,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
-
-        
+        // TODO add your handling code here:        
         
         String idPublicacion = txtPublicacion.getText();
         String tipoPublicacion = (String)jComboPublic.getSelectedItem();
