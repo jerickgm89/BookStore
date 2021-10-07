@@ -34,6 +34,7 @@ public class VistaConsulta extends javax.swing.JFrame {
             System.out.println(e);
         }
         c.desconexion();
+        
         //Estableciendo el nombre de las columnas a la tabla
         String[] titulos = {"ID VENTA", "FECHA", "ID PUBLIC", "CANTIDAD", "TOTAL"};
         modelo = new DefaultTableModel(null, titulos);
@@ -92,7 +93,7 @@ public class VistaConsulta extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableConsulta);
 
-        jButton2.setText("SALIR");
+        jButton2.setText("VOLVER");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
