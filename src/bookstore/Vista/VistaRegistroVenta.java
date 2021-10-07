@@ -26,14 +26,9 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         
         txtFechaActual.setText(fecha());
         
-        //Deshabilitando Campos
-        txtFechaActual.setEditable(false);
-        txtNombrePublicacion.setEditable(false);
-        txtAutorPublicacion.setEditable(false);
-        txtPrecioUnitario.setEditable(false);
-        txtStock.setEditable(false);
-        btnRegistrar.setEnabled(false);
         
+        desahabilitarCamposPrincipales();        
+
         //Deshabilitando campos cliente
         deshabilitarCamposCliente();
         
@@ -415,7 +410,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         double descuento = calcular.calculoDescuento(cantidad);
         double igv = obtenerIGV();
         double subtotal = calcular.subtotal(cantidad, precioUnitario, igv);
-        double totalPago = calcular.totalPago(subtotal, descuento);
+        double totalPago = Math.round(calcular.totalPago(subtotal, descuento)*100)/100;
         
         System.out.println(precioUnitario);
         System.out.println(cantidad);
@@ -467,10 +462,12 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         System.out.println(ventaContador);
         
         RegistroVentaControlador datos = recuperarDatosVenta();
-        String fecha = txtFechaActual.getText();
-        System.out.println(fecha);
+        
+        String fecha = txtFechaActual.getText();        
         int idEmpleado = Integer.parseInt((String)jComboEmpleado.getSelectedItem());
         String numeroPublicacion = (String)jComboVenta.getSelectedItem();
+        int stock = Integer.parseInt(txtStock.getText());
+        int stockActual = stock - datos.getCantidad(); 
               
         int descuento = (int)Math.round(datos.getDescuento());
         int subtotal = (int)Math.round(datos.getSubtotal());
@@ -479,17 +476,36 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         
         String sentenciaInsertarSQL = String.format("INSERT INTO VENTA VALUES (%d, '%s', '%s', %d, '%s', %d, %d, %d, %d, %d, %d)", ventaContador, datos.getNombreCliente(), fecha, idEmpleado, numeroPublicacion, datos.getCantidad(), datos.getPrecio(), descuento, subtotal, igv, total);
         String sentenciaUpdateSQL = String.format("UPDATE CONTROL SET VALOR = '%s' WHERE PARAMETRO = 'VENTA'", ventaContadorS);
+        String actualizarStockSQL = String.format("UPDATE PUBLICACION SET STOCK = %d WHERE IDPUBLICACION = '%s'", stockActual, numeroPublicacion);
         
-        Conexion c = new Conexion();
-        c.getConnection();
+        if(stock > datos.getCantidad()){
+            Conexion c = new Conexion();
+            c.getConnection();
+
+
+            c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
+            c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
+            c.ejecutarSentenciaSQL(actualizarStockSQL);
+
+            c.desconexion();
+
+            JOptionPane.showMessageDialog(null, "Venta Realizada con exito");
+
+            desahabilitarCamposPrincipales();        
+
+            //Deshabilitando campos cliente
+            deshabilitarCamposCliente();
+
+            //Deshabilitando campos Calcular
+            deshabilitarCamposCalcular();
+
+            limpiarCampos();
         
+        }else{
+            JOptionPane.showMessageDialog(null, "No hay Stock suficiente para la cantidad solicitada");
+        }
         
-        c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
-        c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
-        
-        c.desconexion();
-        
-        JOptionPane.showMessageDialog(null, "Venta Realizada con exito");
+
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
     
@@ -579,6 +595,29 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtTotal.setEditable(false);
     }
     
+    private void desahabilitarCamposPrincipales() {
+         //Deshabilitando Campos
+        txtFechaActual.setEditable(false);
+        txtNombrePublicacion.setEditable(false);
+        txtAutorPublicacion.setEditable(false);
+        txtPrecioUnitario.setEditable(false);
+        txtStock.setEditable(false);
+        btnRegistrar.setEnabled(false);        
+    }
+    
+    private void limpiarCampos(){
+        txtNombrePublicacion.setText(null);
+        txtAutorPublicacion.setText(null);
+        txtPrecioUnitario.setText(null);
+        txtStock.setText(null);
+        txtNombreCliente.setText(null);
+        txtCantidad.setText(null);
+        txtSubtotal.setText(null);
+        txtIGV.setText(null);
+        txtDescuento.setText(null);
+        txtTotal.setText(null);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -650,4 +689,6 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
     private javax.swing.JTextField txtSubtotal;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
+
+
 }
