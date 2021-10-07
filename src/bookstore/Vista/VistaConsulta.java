@@ -6,6 +6,7 @@
 package bookstore.Vista;
 
 import bookstore.BaseDatos.Conexion;
+import bookstore.Controlador.ConsultaControlador;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 
@@ -169,29 +170,16 @@ public class VistaConsulta extends javax.swing.JFrame {
         //Guardando los datos del Usuario
         String datoSeleccion = (String)jComboConsulta.getSelectedItem();
         
-        //Condicional para ejecutar la sentencia
-        String sentenciaSQL = "";
-            switch(datoSeleccion){
-                case "LIB":
-                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'LIB%'";
-                    break;
-                case "REV":
-                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'REV%'";
-                    break;
-                case "SEP":
-                    sentenciaSQL = "SELECT IDVENTA, FECHA, IDPUBLICACION, CANTIDAD, TOTAL FROM VENTA WHERE IDPUBLICACION LIKE 'SEP%'";
-                    break;
-                default:
-                    System.out.println("Error");
-                    break;
-            }
+        ConsultaControlador sentenciaSQL = new ConsultaControlador();
+                
+        String consultaSQL = sentenciaSQL.ejecucionSQL(datoSeleccion);
         
         //Mostrando los datos en la tabla    
         Conexion c = new Conexion();
         c.getConnection();
         try { 
                 
-            ResultSet resultado = c.consultarRegistros(sentenciaSQL);
+            ResultSet resultado = c.consultarRegistros(consultaSQL);
             while(resultado.next()){
                 
                 Object[] oUsuario={resultado.getString("IDVENTA"), resultado.getString("FECHA"), resultado.getString("IDPUBLICACION"), resultado.getString("CANTIDAD"), resultado.getString("TOTAL")};
