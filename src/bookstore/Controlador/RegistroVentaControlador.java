@@ -33,24 +33,24 @@ public class RegistroVentaControlador {
         return descuento;
     }
     
-    public double subtotal(int cantidad, int precio, double igv){
+    public double subtotal(int cantidad, int precio, double descuento){
         this.cantidad = cantidad;
-        this.igv = igv;
+        this.descuento = descuento;
         this.precio = precio;
         
         int parcial = precio * cantidad;
         
-        subtotal = parcial + (parcial * igv);
+        subtotal = parcial - (parcial * descuento);
         
         return subtotal;       
         
     }
     
-    public double totalPago(double subtotal, double descuento){
+    public double totalPago(double subtotal, double igv){
         this.subtotal = subtotal;
-        this.descuento = descuento;
+        this.igv = igv;
         
-        total = subtotal - (subtotal * descuento);
+        total = subtotal - (subtotal * igv);
         
         return total;
     }    

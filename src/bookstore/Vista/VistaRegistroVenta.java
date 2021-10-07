@@ -409,8 +409,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         int cantidad = Integer.parseInt(txtCantidad.getText());
         double descuento = calcular.calculoDescuento(cantidad);
         double igv = obtenerIGV();
-        double subtotal = calcular.subtotal(cantidad, precioUnitario, igv);
-        double totalPago = Math.round(calcular.totalPago(subtotal, descuento)*100)/100;
+        double subtotal = calcular.subtotal(cantidad, precioUnitario, descuento);
+        double totalPago = Math.round(calcular.totalPago(subtotal, igv)*100)/100;
         
         System.out.println(precioUnitario);
         System.out.println(cantidad);
