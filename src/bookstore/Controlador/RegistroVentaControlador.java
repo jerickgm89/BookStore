@@ -50,7 +50,7 @@ public class RegistroVentaControlador {
         this.subtotal = subtotal;
         this.igv = igv;
         
-        total = subtotal - (subtotal * igv);
+        total = subtotal + (subtotal * igv);
         
         return total;
     }    

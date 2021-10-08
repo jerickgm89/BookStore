@@ -76,9 +76,9 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtAutorPublicacion = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtStock = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         txtPrecioUnitario = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtStock = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         txtNombreCliente = new javax.swing.JTextField();
@@ -131,15 +131,15 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtAutorPublicacion.setBackground(new java.awt.Color(153, 153, 153));
         txtAutorPublicacion.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel5.setText("STOCK (UU)");
-
-        txtStock.setBackground(new java.awt.Color(153, 153, 153));
-        txtStock.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel6.setText("PRECIO UNITARIO S/.");
+        jLabel5.setText("PRECIO UNITARIO S/.");
 
         txtPrecioUnitario.setBackground(new java.awt.Color(153, 153, 153));
         txtPrecioUnitario.setForeground(new java.awt.Color(0, 0, 0));
+
+        jLabel6.setText("STOCK");
+
+        txtStock.setBackground(new java.awt.Color(153, 153, 153));
+        txtStock.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -151,13 +151,13 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txtNombrePublicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addComponent(jLabel6)
-                    .addComponent(txtPrecioUnitario))
+                    .addComponent(txtStock))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
                     .addComponent(txtAutorPublicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                    .addComponent(txtStock))
+                    .addComponent(txtPrecioUnitario))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -177,8 +177,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -517,7 +517,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         // TODO add your handling code here:
         RegistroVentaControlador calcular = new RegistroVentaControlador();
         
-        int precioUnitario = Integer.parseInt(txtPrecioUnitario.getText());
+        int precioUnitario = Integer.parseInt(txtStock.getText());
         int cantidad = Integer.parseInt(txtCantidad.getText());
         double descuento = calcular.calculoDescuento(cantidad);
         double igv = obtenerIGV();
@@ -578,7 +578,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         String fecha = txtFechaActual.getText();        
         int idEmpleado = Integer.parseInt((String)jComboEmpleado.getSelectedItem());
         String numeroPublicacion = (String)jComboVenta.getSelectedItem();
-        int stock = Integer.parseInt(txtStock.getText());
+        int stock = Integer.parseInt(txtPrecioUnitario.getText());
         int stockActual = stock - datos.getCantidad(); 
               
         int descuento = (int)Math.round(datos.getDescuento());
@@ -624,15 +624,15 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
     public void agregarDatosCampos(String titulo, String autor, String precioUnitario, String stock){
         txtNombrePublicacion.setText(titulo);
         txtAutorPublicacion.setText(autor);
-        txtPrecioUnitario.setText(precioUnitario);
-        txtStock.setText(stock);
+        txtStock.setText(precioUnitario);
+        txtPrecioUnitario.setText(stock);
     }
     
     public RegistroVentaControlador recuperarDatosVenta(){
         RegistroVentaControlador datos = new RegistroVentaControlador();
         
         int cantidad = Integer.parseInt(txtCantidad.getText());
-        int precio = Integer.parseInt(txtPrecioUnitario.getText());
+        int precio = Integer.parseInt(txtStock.getText());
         double descuento = datos.calculoDescuento(cantidad);
         double igv = obtenerIGV();
         double subtotal = datos.subtotal(cantidad, precio, igv);
@@ -712,16 +712,16 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         txtFechaActual.setEditable(false);
         txtNombrePublicacion.setEditable(false);
         txtAutorPublicacion.setEditable(false);
-        txtPrecioUnitario.setEditable(false);
         txtStock.setEditable(false);
+        txtPrecioUnitario.setEditable(false);
         btnRegistrar.setEnabled(false);        
     }
     
     private void limpiarCampos(){
         txtNombrePublicacion.setText(null);
         txtAutorPublicacion.setText(null);
-        txtPrecioUnitario.setText(null);
         txtStock.setText(null);
+        txtPrecioUnitario.setText(null);
         txtNombreCliente.setText(null);
         txtCantidad.setText(null);
         txtSubtotal.setText(null);
