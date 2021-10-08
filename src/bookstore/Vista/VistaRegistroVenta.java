@@ -586,6 +586,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         int igv = (int)Math.round(datos.getIgv());
         int total = (int)Math.round(datos.getTotal());
         
+        System.out.println(total);
+        
         String sentenciaInsertarSQL = String.format("INSERT INTO VENTA VALUES (%d, '%s', '%s', %d, '%s', %d, %d, %d, %d, %d, %d)", ventaContador, datos.getNombreCliente(), fecha, idEmpleado, numeroPublicacion, datos.getCantidad(), datos.getPrecio(), descuento, subtotal, igv, total);
         String sentenciaUpdateSQL = String.format("UPDATE CONTROL SET VALOR = '%s' WHERE PARAMETRO = 'VENTA'", ventaContadorS);
         String actualizarStockSQL = String.format("UPDATE PUBLICACION SET STOCK = %d WHERE IDPUBLICACION = '%s'", stockActual, numeroPublicacion);
@@ -635,8 +637,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         int precio = Integer.parseInt(txtStock.getText());
         double descuento = datos.calculoDescuento(cantidad);
         double igv = obtenerIGV();
-        double subtotal = datos.subtotal(cantidad, precio, igv);
-        double totalPago = datos.totalPago(subtotal, descuento);
+        double subtotal = datos.subtotal(cantidad, precio, descuento);
+        double totalPago = datos.totalPago(subtotal, igv);
         
         datos.setNombreCliente(txtNombreCliente.getText());
         datos.setCantidad(cantidad);
