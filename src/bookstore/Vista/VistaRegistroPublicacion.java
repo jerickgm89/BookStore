@@ -72,6 +72,7 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         btnNuevo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(49, 165, 160));
 

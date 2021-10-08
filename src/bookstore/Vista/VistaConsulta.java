@@ -65,6 +65,7 @@ public class VistaConsulta extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 255));
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(50, 165, 160));
 

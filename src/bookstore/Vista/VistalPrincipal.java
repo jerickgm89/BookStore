@@ -41,6 +41,7 @@ public class VistalPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(60, 153, 136));
+        setUndecorated(true);
 
         jPanel2.setBackground(new java.awt.Color(49, 153, 148));
 
