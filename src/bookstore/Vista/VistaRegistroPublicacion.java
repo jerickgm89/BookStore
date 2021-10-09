@@ -92,6 +92,8 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
         jLabel3.setText("ID PUBLICACION");
 
         txtPublicacion.setForeground(new java.awt.Color(0, 0, 0));
+        txtPublicacion.setCaretColor(new java.awt.Color(102, 102, 102));
+        txtPublicacion.setDisabledTextColor(new java.awt.Color(102, 102, 102));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
