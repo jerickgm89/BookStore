@@ -371,32 +371,35 @@ public class VistaRegistroPublicacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:        
+        // TODO add your handling code here:     
         
-        String idPublicacion = txtPublicacion.getText();
-        String tipoPublicacion = (String)jComboPublic.getSelectedItem();
-        int numero = numeroContador();
+        if("".equals(txtTitulo.getText()) || "".equals(txtAutor.getText()) || "".equals(txtEdicion.getText()) || "".equals(txtCantidad.getText()) || "".equals(txtPrecio.getText())){
+            JOptionPane.showMessageDialog(null, "Ingrese de datos todos los campos");
+        }else {
+            String idPublicacion = txtPublicacion.getText();
+            String tipoPublicacion = (String)jComboPublic.getSelectedItem();
+            int numero = numeroContador();
 
-        RegistroControlador datosVista = recuperarDatosVista();
+            RegistroControlador datosVista = recuperarDatosVista();
+
+            Conexion c = new Conexion();
+            c.getConnection();
+
+            String sentenciaInsertarSQL = String.format("INSERT INTO PUBLICACION VALUES ('%s','%s','%s','%s',%d,%d,%d)", idPublicacion, datosVista.getTitulo(), tipoPublicacion, datosVista.getAutor(), datosVista.getNumeroEdicion(), datosVista.getCantidadStock(), datosVista.getPrecio() );
+
+            String sentenciaUpdateSQL = String.format("UPDATE TIPO SET CONTADOR = %d WHERE IDTIPO = '%s'", numero, tipoPublicacion);
+
+            c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
+            c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
+
+            c.desconexion();
+
+            JOptionPane.showMessageDialog(null, "Registro realizado con exito");
+
+            limpiarCampos();
+            desabilitarCampos();
+        }
         
-        Conexion c = new Conexion();
-        c.getConnection();
-        
-        String sentenciaInsertarSQL = String.format("INSERT INTO PUBLICACION VALUES ('%s','%s','%s','%s',%d,%d,%d)", idPublicacion, datosVista.getTitulo(), tipoPublicacion, datosVista.getAutor(), datosVista.getNumeroEdicion(), datosVista.getCantidadStock(), datosVista.getPrecio() );
-        
-        String sentenciaUpdateSQL = String.format("UPDATE TIPO SET CONTADOR = %d WHERE IDTIPO = '%s'", numero, tipoPublicacion);
-        
-        c.ejecutarSentenciaSQL(sentenciaInsertarSQL);
-        c.ejecutarSentenciaSQL(sentenciaUpdateSQL);
-            
-        c.desconexion();
-        
-        JOptionPane.showMessageDialog(null, "Registro realizado con exito");
-        
-        limpiarCampos();
-        desabilitarCampos();
-        
-       
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void txtEdicionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdicionKeyTyped

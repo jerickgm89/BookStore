@@ -26,6 +26,7 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         
         txtFechaActual.setText(fecha());
         
+        jCalcular.setEnabled(false);
         
         desahabilitarCamposPrincipales();        
 
@@ -509,6 +510,8 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         }
 
         c.desconexion();
+        
+        jCalcular.setEnabled(true);
         habilitarCamposCliente();
     
     }//GEN-LAST:event_jBuscarActionPerformed
@@ -517,29 +520,33 @@ public class VistaRegistroVenta extends javax.swing.JFrame {
         // TODO add your handling code here:
         RegistroVentaControlador calcular = new RegistroVentaControlador();
         
-        int precioUnitario = Integer.parseInt(txtStock.getText());
-        int cantidad = Integer.parseInt(txtCantidad.getText());
-        double descuento = calcular.calculoDescuento(cantidad);
-        double igv = obtenerIGV();
-        double subtotal = calcular.subtotal(cantidad, precioUnitario, descuento);
-        double totalPago = Math.round(calcular.totalPago(subtotal, igv)*100)/100;
+
         
-        System.out.println(precioUnitario);
-        System.out.println(cantidad);
-        System.out.println(descuento);
-        System.out.println(igv);
-        System.out.println(subtotal);
-        System.out.println(totalPago);
+        if ("".equals(txtNombreCliente.getText())) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre del cliente");
+        }else if ("".equals(txtCantidad.getText())){  
+            JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida");
+        } else{
+            int precioUnitario = Integer.parseInt(txtStock.getText());
+            int cantidad = Integer.parseInt(txtCantidad.getText());
+            double descuento = calcular.calculoDescuento(cantidad);
+            double igv = obtenerIGV();
+            double subtotal = calcular.subtotal(cantidad, precioUnitario, descuento);
+            double totalPago = Math.round(calcular.totalPago(subtotal, igv)*100)/100;
+
+            String descuentoFinal = String.valueOf(descuento * 100) + '%';
+            String igvFinal = String.valueOf(igv * 100) + '%';
+            
+            txtSubtotal.setText(String.valueOf(subtotal));
+            txtIGV.setText(String.valueOf(igvFinal));
+            txtDescuento.setText(String.valueOf(descuentoFinal));
+            txtTotal.setText(String.valueOf(totalPago));
+            
+            btnRegistrar.setEnabled(true);
+        }
+
         
-        String descuentoFinal = String.valueOf(descuento * 100) + '%';
-        String igvFinal = String.valueOf(igv * 100) + '%';
         
-        txtSubtotal.setText(String.valueOf(subtotal));
-        txtIGV.setText(String.valueOf(igvFinal));
-        txtDescuento.setText(String.valueOf(descuentoFinal));
-        txtTotal.setText(String.valueOf(totalPago));
-        
-        btnRegistrar.setEnabled(true);
     }//GEN-LAST:event_jCalcularActionPerformed
 
     private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
